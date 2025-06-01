@@ -1,1 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
 
+<head>
+  <meta charset="UTF-8" />
+  <title>Hum 2 EDGB Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.4;
+    }
+
+    h2 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+      margin-top: 40px;
+    }
+
+    /* Jede Gruppe in zwei Spalten anordnen: links Audio, rechts Plot */
+    .group {
+      display: flex;
+      align-items: flex-start;
+      gap: 100px;
+      /* kleiner Abstand zwischen Audio und Plot */
+      margin-bottom: 30px;
+      /* Abstand nach unten */
+    }
+
+    /* Der Audio-Container soll nur Platz für den Inhalt belegen (kein flex:1) */
+    .audio-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      /* Abstand zwischen den einzelnen Audio-Blöcken */
+    }
+
+    /* Jedes Label+Audio-Paar als eigene Box, damit Audio immer unter Label steht */
+    .audio-container>div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .audio-container label {
+      font-weight: bold;
+      margin-bottom: 4px;
+      /* Kleiner Abstand zwischen Label und Audio-Element */
+    }
+
+    .plot-container {
+      max-width: 600px;
+      /* Breite des Plots begrenzen */
+    }
+
+    .plot {
+      width: 100%;
+      border: 1px solid #ddd;
+      padding: 5px;
+      background: #f9f9f9;
+      cursor: pointer;
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Demo: Hum Single to EDGB</h1>
+  <p>
+    Für jede Dateigruppe (Original → Reconstructed → Generated Guitar) werden die Audios links angezeigt und der
+    zugehörige Plot rechts. Klick auf den Plot öffnet ihn im Vollbild (neuer Tab).
+  </p>
+
+  <!-- ------------------- F01_0033_0001_1 ------------------- -->
+  <h2>F01_0033_0001_1</h2>
+  <div class="group">
+    <!-- Linke Spalte: Audio-Dateien -->
+    <div class="audio-container">
+      <div>
+        <label>Original:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/org/F01_0033_0001_1.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Reconstructed:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2hum/F01_0033_0001_1_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Generated Guitar:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2guitar/F01_0033_0001_1_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+    </div>
+
+    <!-- Rechte Spalte: Plot-Bild -->
+    <div class="plot-container">
+      <a href="files/hum_single_2_edgb/plots/F01_0033_0001_1.png" target="_blank">
+        <img class="plot" src="files/hum_single_2_edgb/plots/F01_0033_0001_1.png" alt="Plot für F01_0033_0001_1" />
+      </a>
+    </div>
+  </div>
+
+  <!-- ------------------- F01_0123_0001_1_D ------------------- -->
+  <h2>F01_0123_0001_1_D</h2>
+  <div class="group">
+    <div class="audio-container">
+      <div>
+        <label>Original:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/org/F01_0123_0001_1_D.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Reconstructed:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2hum/F01_0123_0001_1_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Generated Guitar:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2guitar/F01_0123_0001_1_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+    </div>
+    <div class="plot-container">
+      <a href="files/hum_single_2_edgb/plots/F01_0123_0001_1_D.png" target="_blank">
+        <img class="plot" src="files/hum_single_2_edgb/plots/F01_0123_0001_1_D.png" alt="Plot für F01_0123_0001_1_D" />
+      </a>
+    </div>
+  </div>
+
+  <!-- ------------------- F01_0144_0001_2_D ------------------- -->
+  <h2>F01_0144_0001_2_D</h2>
+  <div class="group">
+    <div class="audio-container">
+      <div>
+        <label>Original:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/org/F01_0144_0001_2_D.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Reconstructed:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2hum/F01_0144_0001_2_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Generated Guitar:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2guitar/F01_0144_0001_2_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+    </div>
+    <div class="plot-container">
+      <a href="files/hum_single_2_edgb/plots/F01_0144_0001_2_D.png" target="_blank">
+        <img class="plot" src="files/hum_single_2_edgb/plots/F01_0144_0001_2_D.png" alt="Plot für F01_0144_0001_2_D" />
+      </a>
+    </div>
+  </div>
+
+  <!-- ------------------- F01_0195_0002_2_D ------------------- -->
+  <h2>F01_0195_0002_2_D</h2>
+  <div class="group">
+    <div class="audio-container">
+      <div>
+        <label>Original:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/org/F01_0195_0002_2_D.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Reconstructed:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2hum/F01_0195_0002_2_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Generated Guitar:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2guitar/F01_0195_0002_2_D_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+    </div>
+    <div class="plot-container">
+      <a href="files/hum_single_2_edgb/plots/F01_0195_0002_2_D.png" target="_blank">
+        <img class="plot" src="files/hum_single_2_edgb/plots/F01_0195_0002_2_D.png" alt="Plot für F01_0195_0002_2_D" />
+      </a>
+    </div>
+  </div>
+
+  <!-- ------------------- F01_0409_0002_1 ------------------- -->
+  <h2>F01_0409_0002_1</h2>
+  <div class="group">
+    <div class="audio-container">
+      <div>
+        <label>Original:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/org/F01_0409_0002_1.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Reconstructed:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2hum/F01_0409_0002_1_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+      <div>
+        <label>Generated Guitar:</label>
+        <audio controls preload="none">
+          <source src="files/hum_single_2_edgb/hum2guitar/F01_0409_0002_1_generated.wav" type="audio/wav" />
+          Dein Browser unterstützt keine Audio-Wiedergabe.
+        </audio>
+      </div>
+    </div>
+    <div class="plot-container">
+      <a href="files/hum_single_2_edgb/plots/F01_0409_0002_1.png" target="_blank">
+        <img class="plot" src="files/hum_single_2_edgb/plots/F01_0409_0002_1.png" alt="Plot für F01_0409_0002_1" />
+      </a>
+    </div>
+  </div>
+
+</body>
+
+</html>
