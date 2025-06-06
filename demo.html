@@ -60,6 +60,21 @@
       cursor: pointer;
       display: block;
     }
+
+    button {
+      display: inline-block;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-family: Arial, sans-serif;
+      font-weight: bold;
+      color: #ffffff;
+      background-color: #2c3e50;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
   </style>
 </head>
 
@@ -238,6 +253,109 @@
       </a>
     </div>
   </div>
+
+  <!-- ------------------- 63 ------------------- -->
+  <h2 style="font-size: 2rem;">Guitar 2 Hum</h2>
+  <div class="group">
+    <h3>63</h2>
+      <!-- Linke Spalte: Audio-Dateien -->
+      <div class="audio-container">
+        <div>
+
+          <label>Guitar Input:</label>
+          <audio id="guitar63" controls preload="none">
+            <source src="files/hum_single_2_edgb/org/63.wav" type="audio/wav" />
+            Dein Browser unterstützt keine Audio-Wiedergabe.
+          </audio>
+        </div>
+        <div>
+          <label>Generated Humming:</label>
+          <audio id="hum63" controls preload="none">
+            <source src="files/hum_single_2_edgb/guitar2hum/63_generated.wav" type="audio/wav" />
+            Dein Browser unterstützt keine Audio-Wiedergabe.
+          </audio>
+        </div>
+        <button id="playBoth63">Play both at the same time!</button>
+      </div>
+
+      <!-- ------------------- 98 ------------------- -->
+      <h3>98</h3>
+      <div class="group">
+        <!-- Linke Spalte: Audio-Dateien -->
+        <div class="audio-container">
+          <div>
+            <label>Guitar Input:</label>
+            <audio id="guitar98" controls preload="none">
+              <source src="files/hum_single_2_edgb/org/98.wav" type="audio/wav" />
+              Dein Browser unterstützt keine Audio-Wiedergabe.
+            </audio>
+          </div>
+          <div>
+            <label>Generated Humming:</label>
+            <audio id="hum98" controls preload="none">
+              <source src="files/hum_single_2_edgb/guitar2hum/98_generated.wav" type="audio/wav" />
+              Dein Browser unterstützt keine Audio-Wiedergabe.
+            </audio>
+          </div>
+          <button id="playBoth98">Play both at the same time!</button>
+        </div>
+
+        <!-- ------------------- 130 ------------------- -->
+        <h3>130</h3>
+        <div class="group">
+          <!-- Linke Spalte: Audio-Dateien -->
+          <div class="audio-container">
+            <div>
+              <label>Guitar Input:</label>
+              <audio id="guitar130" controls preload="none">
+                <source src="files/hum_single_2_edgb/org/130.wav" type="audio/wav" />
+                Dein Browser unterstützt keine Audio-Wiedergabe.
+              </audio>
+            </div>
+            <div>
+              <label>Generated Humming:</label>
+              <audio id="hum130" controls preload="none">
+                <source src="files/hum_single_2_edgb/guitar2hum/130_generated.wav" type="audio/wav" />
+                Dein Browser unterstützt keine Audio-Wiedergabe.
+              </audio>
+            </div>
+            <button id="playBoth130">Play both at the same time!</button>
+          </div>
+
+          <script>
+            document.getElementById('playBoth63').addEventListener('click', function () {
+              const guitar = document.getElementById('guitar63');
+              const humming = document.getElementById('hum63');
+
+              guitar.currentTime = 0;
+              humming.currentTime = 0;
+
+              guitar.play();
+              humming.play();
+            });
+
+            document.getElementById('playBoth98').addEventListener('click', function () {
+              const guitar = document.getElementById('guitar98');
+              const humming = document.getElementById('hum98');
+
+              guitar.currentTime = 0;
+              humming.currentTime = 0;
+
+              guitar.play();
+              humming.play();
+            });
+
+            document.getElementById('playBoth130').addEventListener('click', function () {
+              const guitar = document.getElementById('guitar130');
+              const humming = document.getElementById('hum130');
+
+              guitar.currentTime = 0;
+              humming.currentTime = 0;
+
+              guitar.play();
+              humming.play();
+            });
+          </script>
 
 </body>
 
