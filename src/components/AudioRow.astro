@@ -1,4 +1,6 @@
 ---
+import AudioPlayer from "./AudioPlayer.astro";
+
 export interface Props {
   title: string;
   folderName: string;
@@ -6,11 +8,21 @@ export interface Props {
 }
 const { title, folderName, groundTruthSrc } = Astro.props;
 
-const allAudioFiles = await Astro.glob("../assets/audio/**/*.{wav,mp3,ogg}");
+const allAudioFiles = await Astro.glob(
+  "../../public/assets/audio/**/*.{wav,mp3,ogg}"
+);
 
 const audioFilesInFolder = allAudioFiles.filter((file) => {
   return file.default.includes(`/${folderName}/`);
 });
+
+let groundTruthSpecPath;
+if (groundTruthSrc) {
+  const gtFileName = groundTruthSrc.split("/").pop();
+  const gtSpecFileName = gtFileName?.replace(/\.[^/.]+$/, ".png");
+  const gtFolderName = groundTruthSrc.split("/").slice(-2, -1)[0];
+  groundTruthSpecPath = `/assets/spectrograms/${gtFolderName}/${gtSpecFileName}`;
+}
 ---
 
 <div class="mb-12">
@@ -19,8 +31,8 @@ const audioFilesInFolder = allAudioFiles.filter((file) => {
     class:list={[
       "p-4 rounded-lg shadow-sm flex justify-between items-center mb-6 min-h-[86px]",
       groundTruthSrc
-        ? "bg-sky-50 border-sky-200" // Klassen, wenn GT vorhanden ist
-        : "bg-slate-50 border-dashed border-slate-300", // Klassen, wenn GT fehlt
+        ? "bg-sky-50 border-sky-200"
+        : "bg-slate-50 border-dashed border-slate-300",
     ]}
   >
     {
@@ -29,11 +41,17 @@ const audioFilesInFolder = allAudioFiles.filter((file) => {
           <strong class="font-mono text-sm text-sky-800">
             Original (Ground Truth) ⭐
           </strong>
-          <audio controls src={groundTruthSrc} class="max-w-[250px]" />
+          <AudioPlayer
+            src={groundTruthSrc}
+            class="max-w-[300px]"
+            specPath={groundTruthSpecPath}
+          />
         </>
       ) : (
         <div class="w-full text-center">
-          <span class="text-slate-400 text-sm italic"></span>
+          <span class="text-slate-400 text-sm italic">
+            Kein Original für diesen Vergleich vorhanden
+          </span>
         </div>
       )
     }
@@ -43,9 +61,17 @@ const audioFilesInFolder = allAudioFiles.filter((file) => {
     {
       audioFilesInFolder.length > 0 ? (
         audioFilesInFolder.map((audioFile) => {
+          const fileName = audioFile.default.split("/").pop();
+          const specFileName = fileName.replace(/\.[^/.]+$/, ".png");
+          const specImagePath = `/assets/spectrograms/${folderName}/${specFileName}`;
+
           return (
             <div class="bg-white p-4 rounded-lg shadow-sm border flex justify-between items-center">
-              <audio controls src={audioFile.default} class="max-w-[250px]" />
+              <AudioPlayer
+                src={audioFile.default}
+                class="max-w-[300px]"
+                specPath={specImagePath}
+              />
             </div>
           );
         })

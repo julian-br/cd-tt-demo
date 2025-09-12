@@ -1,0 +1,94 @@
+---
+export interface Props {
+  src: string;
+  class?: string;
+  specPath?: string;
+}
+const { src, class: className, specPath } = Astro.props;
+---
+
+<div class:list={["flex w-full items-center gap-x-3", className]}>
+  <audio controls src={src} class="flex-grow"></audio>
+  {
+    specPath && (
+      <button
+        type="button"
+        class="view-spec-button whitespace-nowrap rounded-md bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm ring-1 ring-inset ring-slate-300 hover:bg-slate-200 transition-colors"
+        data-spec-path={specPath}
+      >
+        View Spec
+      </button>
+    )
+  }
+</div>
+
+<div
+  class="spec-modal-container fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4"
+>
+  <div
+    class="spec-modal-content relative rounded-lg bg-white p-4 shadow-xl w-full max-w-5xl h-[25vh] overflow-x-auto"
+  >
+    <button
+      class="close-modal-button absolute top-2 right-2 rounded-full bg-slate-800 p-1 text-white hover:bg-slate-600 z-10"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        ><line x1="18" y1="6" x2="6" y2="18"></line><line
+          x1="6"
+          y1="6"
+          x2="18"
+          y2="18"></line></svg
+      >
+    </button>
+    <img src="" alt="Mel Spectrogram" class="spec-image h-full max-w-none" />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.body.addEventListener("click", (event: MouseEvent) => {
+      const button = (event.target as Element).closest<HTMLButtonElement>(
+        ".view-spec-button"
+      );
+      if (!button) return;
+
+      const specPath = button.dataset.specPath;
+      const playerContainer = button.parentElement;
+      const modal = playerContainer?.nextElementSibling as HTMLElement | null;
+      const img = modal?.querySelector<HTMLImageElement>(".spec-image");
+      const closeModalButton = modal?.querySelector<HTMLButtonElement>(
+        ".close-modal-button"
+      );
+
+      if (!specPath || !modal || !img || !closeModalButton) return;
+
+      img.src = specPath;
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+
+      const closeModal = () => {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        img.src = "";
+      };
+
+      const once = { once: true };
+      closeModalButton.addEventListener("click", closeModal, once);
+      modal.addEventListener(
+        "click",
+        (e: MouseEvent) => {
+          if (e.target === modal) closeModal();
+        },
+        once
+      );
+    });
+  });
+</script>
