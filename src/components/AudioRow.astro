@@ -1,0 +1,57 @@
+---
+export interface Props {
+  title: string;
+  folderName: string;
+  groundTruthSrc?: string;
+}
+const { title, folderName, groundTruthSrc } = Astro.props;
+
+const allAudioFiles = await Astro.glob("../assets/audio/**/*.{wav,mp3,ogg}");
+
+const audioFilesInFolder = allAudioFiles.filter((file) => {
+  return file.default.includes(`/${folderName}/`);
+});
+---
+
+<div class="mb-12">
+  <h2 class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">{title}</h2>
+  <div
+    class:list={[
+      "p-4 rounded-lg shadow-sm flex justify-between items-center mb-6 min-h-[86px]",
+      groundTruthSrc
+        ? "bg-sky-50 border-sky-200" // Klassen, wenn GT vorhanden ist
+        : "bg-slate-50 border-dashed border-slate-300", // Klassen, wenn GT fehlt
+    ]}
+  >
+    {
+      groundTruthSrc ? (
+        <>
+          <strong class="font-mono text-sm text-sky-800">
+            Original (Ground Truth) ⭐
+          </strong>
+          <audio controls src={groundTruthSrc} class="max-w-[250px]" />
+        </>
+      ) : (
+        <div class="w-full text-center">
+          <span class="text-slate-400 text-sm italic"></span>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="space-y-4">
+    {
+      audioFilesInFolder.length > 0 ? (
+        audioFilesInFolder.map((audioFile) => {
+          return (
+            <div class="bg-white p-4 rounded-lg shadow-sm border flex justify-between items-center">
+              <audio controls src={audioFile.default} class="max-w-[250px]" />
+            </div>
+          );
+        })
+      ) : (
+        <p class="text-slate-500">No Audio in '{folderName}' found.</p>
+      )
+    }
+  </div>
+</div>

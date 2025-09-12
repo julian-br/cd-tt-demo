@@ -1,0 +1,17 @@
+---
+import AudioRow from "../AudioRow.astro";
+
+import pianoGT from "../../assets/audio/gt/piano_gt.wav";
+---
+
+<main class="max-w-4xl mx-auto p-8">
+  <h1 class="text-4xl font-bold text-center mb-10">Audio-Beispiele</h1>
+  <div class="flex gap-2">
+    <AudioRow title="Input Melody" folderName="hum_mixed" />
+    <AudioRow
+      title="E-Piano"
+      folderName="epiano_base"
+      groundTruthSrc={pianoGT}
+    />
+  </div>
+</main>
