@@ -1,28 +1,291 @@
 ---
 import "../styles/global.css";
+import AudioRow from "../components/AudioRow.astro";
+import AudioPlayer from "../components/AudioPlayer.astro";
+import Experiment from "../components/Experiment.astro";
 
-import DiffInstruments from "../components/subpages/DiffInstruments.astro";
+import pianoGT from "../assets/audio/gt/piano_gt.wav";
+import guitarGT from "../assets/audio/gt/guitar_gt.wav";
+import saxophoneGT from "../assets/audio/gt/saxophone_gt.wav";
+
+const gtSpecFolder = "/assets/spectrograms/gt";
+const pianoGTSpec = `${gtSpecFolder}/piano_gt.png`;
+const guitarGTSpec = `${gtSpecFolder}/guitar_gt.png`;
+const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
 ---
 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>🎹🎸🎷 CD-TT Demo</title>
+    <title>🎶 CD-TT Demo</title>
   </head>
-</html>
 
-<body class="bg-slate-100 text-slate-800">
-  <main class="max-w-4xl mx-auto p-4 sm:p-8">
-    <h1 class="text-3xl font-bold text-center mb-2">
-      Cross domain timbre transfer using deep generative models
-    </h1>
-    <p class="text-center text-slate-600 mb-10">Audio Demo</p>
+  <body class="bg-slate-100 text-slate-800">
+    <main class="max-w-6xl mx-auto p-4 sm:p-8">
+      <h1 class="text-3xl font-bold text-center mb-2">
+        Cross Domain Timbre Transfer Using Deep Generative Models
+      </h1>
+      <p class="text-center text-slate-600 mb-10">Audio Demo</p>
+      <div class="rounded-lg overflow-hidden shadow-xs max-w-xl mx-auto mb-10">
+        <img src="/assets/pipeline.png" alt="overview over the pipeline" />
+      </div>
 
-    <DiffInstruments />
+      <div class="border-b border-slate-200">
+        <nav id="tabs" class="-mb-px flex space-x-6" aria-label="Tabs">
+          <button data-tab-target="#experiment1" class="tab active-tab"
+            >Different Instruments</button
+          >
+          <button data-tab-target="#experiment2" class="tab"
+            >Architectual Changes</button
+          >
+          <button data-tab-target="#experiment3" class="tab"
+            >Conditioning on Sinus</button
+          >
+          <button data-tab-target="#experiment4" class="tab"
+            >Data and Param Size</button
+          >
+        </nav>
+      </div>
 
-    <footer class="text-center mt-12 text-slate-500">
+      <div class="py-6">
+        <div id="experiment1" class="tab-content">
+          <div class="mb-8">
+            <h2 class="font-semibold text-sm text-slate-700 mb-2">
+              Real Instrument Samples
+            </h2>
+            <div class="flex gap-2">
+              <div class="rounded-lg px-2 pb-1 bg-white">
+                <span class="text-xs pl-1 font-semibold text-slate-600"
+                  >E-Piano:</span
+                >
+                <AudioPlayer src={pianoGT} specPath={pianoGTSpec} />
+              </div>
+              <div class="rounded-lg px-2 pb-1 bg-white text-slate-600">
+                <span class="text-xs font-semibold">Saxophone:</span>
+                <AudioPlayer src={saxophoneGT} specPath={saxophoneGTSpec} />
+              </div>
+              <div class="rounded-lg px-2 pb-1 bg-white text-slate-600">
+                <span class="text-xs font-semibold">Guitar:</span>
+                <AudioPlayer src={guitarGT} specPath={guitarGTSpec} />
+              </div>
+            </div>
+          </div>
+          <Experiment title="Results of the Base Model">
+            <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+            <AudioRow
+              title="Generated E-piano"
+              folderName="instruments/hum_mixed_2_epiano_match_base"
+            />
+            <AudioRow
+              title="Generated Saxophone"
+              folderName="instruments/hum_mixed_2_saxophone"
+            />
+            <AudioRow
+              title="Generated Guitar"
+              folderName="instruments/hum_mixed_2_guitar_jam"
+            />
+          </Experiment>
+
+          <Experiment title="Results of unseen Voices"
+            ><AudioRow title="Input Melody (hummed)" folderName="hum_unseen" />
+            <AudioRow
+              title="Generated E-piano"
+              folderName="instruments/unseen_piano"
+            />
+            <AudioRow
+              title="Generated Saxophone"
+              folderName="instruments/unseen_saxophone"
+            />
+            <AudioRow
+              title="Generated Guitar"
+              folderName="instruments/unseen_guitar"
+            />
+          </Experiment>
+        </div>
+      </div>
+      <div id="experiment2" class="tab-content hidden">
+        <Experiment title="Downsample">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="2 Down (baseline)"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="3 Down"
+            folderName="downsample/hum_mixed_2_epiano_3_down_16"
+          />
+          <AudioRow
+            title="4 Down"
+            folderName="downsample/hum_mixed_2_epiano_4_down_8"
+          />
+          <AudioRow
+            title="5 Down"
+            folderName="downsample/hum_mixed_2_epiano_5_down_4"
+          />
+        </Experiment>
+        <Experiment title="Different Discriminator Architectures">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="PatchGan (baseline)"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="Single"
+            folderName="discriminator/hum_mixed_2_epiano_match_sd"
+          />
+          <AudioRow
+            title="Multi Scale Discriminator"
+            folderName="discriminator/hum_mixed_2_epiano_match_msd"
+          />
+        </Experiment>
+        <!-- <Experiment title="Cycle Loss">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="With Cycle Loss"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="Without Cycle Loss"
+            folderName="cycle/hum_mixed_2_epiano_match_no_cycle"
+          />
+          <AudioRow
+            title="With SSIM for Cycle Loss"
+            folderName="hum_mixed_2_epiano_match_cycle_ssim"
+          />
+        </Experiment> -->
+        <Experiment title="Decay Recon losses">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="Without Decay (baseline)"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="With Decay from epoche 60"
+            folderName="decay/hum_mixed_2_epiano_match_decay_recon_2"
+          />
+          <AudioRow
+            title="With Decay from epoche 1"
+            folderName="decay/hum_mixed_2_epiano_match_decay_recon_5"
+          />
+        </Experiment>
+      </div>
+      <div id="experiment3" class="tab-content hidden">
+        <div
+          class="rounded-lg overflow-hidden shadow-xs max-w-md mx-auto mb-10"
+        >
+          <img
+            src="/assets/sinus.png"
+            alt="extracted sinus and sinus with overtones"
+          />
+        </div>
+        <Experiment title="Conditioned and Trained on extracted Sinus">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+
+          <AudioRow title="extracted sinus" folderName="sinus/sinus" />
+          <AudioRow
+            title="trained on sinus"
+            folderName="sinus/hum_mixed_sinus_2_epiano_match"
+          />
+          <AudioRow
+            title="trained on hummed"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+        </Experiment>
+        <Experiment title="Conditioning on extracted Sinus with overtones">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+
+          <AudioRow
+            title="extracted sinus with ot"
+            folderName="sinus/sinus_ot"
+          />
+          <AudioRow
+            title="trained on sinus ot"
+            folderName="sinus/hum_mixed_sinus_ot_2_epiano_match"
+          />
+          <AudioRow
+            title="trained on hummed"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+        </Experiment>
+      </div>
+      <div id="experiment4" class="tab-content hidden">
+        <Experiment title="less Data">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="100 % (120 min)"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="75% (90 min)"
+            folderName="data_size/hum_mixed_2_epiano_match_data_75"
+          />
+          <AudioRow
+            title="50% (60 min)"
+            folderName="data_size/hum_mixed_2_epiano_match_data_50"
+          />
+          <AudioRow
+            title="25% (30 min)"
+            folderName="data_size/hum_mixed_2_epiano_match_data_25"
+          />
+          <AudioRow
+            title="10% (12 min)"
+            folderName="data_size/hum_mixed_2_epiano_match_data_10"
+          />
+        </Experiment>
+        <Experiment title="less params">
+          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+          <AudioRow
+            title="Baseline (2.69 M)"
+            folderName="instruments/hum_mixed_2_epiano_match_base"
+          />
+          <AudioRow
+            title="L (2.10 M)"
+            folderName="param_size/hum_mixed_2_epiano_match_size_L"
+          />
+          <AudioRow
+            title="M (0.85 M)"
+            folderName="param_size/hum_mixed_2_epiano_match_size_M"
+          />
+          <AudioRow
+            title="S (0.23 M)"
+            folderName="param_size/hum_mixed_2_epiano_match_size_S"
+          />
+        </Experiment>
+      </div>
+    </main>
+
+    <footer class="text-center mt-12 text-slate-400">
       <p>&copy; {new Date().getFullYear()} Julian Berner</p>
     </footer>
-  </main>
-</body>
+  </body>
+
+  <script>
+    const tabsContainer = document.getElementById("tabs");
+    if (tabsContainer) {
+      const tabContents = document.querySelectorAll(".tab-content");
+      const tabs = tabsContainer.querySelectorAll(".tab");
+
+      tabsContainer.addEventListener("click", (event) => {
+        const clickedTab = (event.target as Element).closest<HTMLButtonElement>(
+          ".tab"
+        );
+        if (!clickedTab) return;
+
+        const targetSelector = clickedTab.dataset.tabTarget;
+
+        if (!targetSelector) return;
+
+        tabs.forEach((tab) => tab.classList.remove("active-tab"));
+        tabContents.forEach((content) => content.classList.add("hidden"));
+
+        clickedTab.classList.add("active-tab");
+
+        const targetContent = document.querySelector(targetSelector);
+        if (targetContent) {
+          targetContent.classList.remove("hidden");
+        }
+      });
+    }
+  </script>
+</html>

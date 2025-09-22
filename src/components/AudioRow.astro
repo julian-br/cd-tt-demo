@@ -4,74 +4,47 @@ import AudioPlayer from "./AudioPlayer.astro";
 export interface Props {
   title: string;
   folderName: string;
-  groundTruthSrc?: string;
 }
-const { title, folderName, groundTruthSrc } = Astro.props;
+const { title, folderName } = Astro.props;
 
-const allAudioFiles = await Astro.glob(
-  "../../public/assets/audio/**/*.{wav,mp3,ogg}"
-);
+const modules = await import.meta.glob("/src/assets/audio/**/*.wav");
 
-const audioFilesInFolder = allAudioFiles.filter((file) => {
-  return file.default.includes(`/${folderName}/`);
-});
-
-let groundTruthSpecPath;
-if (groundTruthSrc) {
-  const gtFileName = groundTruthSrc.split("/").pop();
-  const gtSpecFileName = gtFileName?.replace(/\.[^/.]+$/, ".png");
-  const gtFolderName = groundTruthSrc.split("/").slice(-2, -1)[0];
-  groundTruthSpecPath = `/assets/spectrograms/${gtFolderName}/${gtSpecFileName}`;
+const audioFilesInFolder = [];
+for (const path in modules) {
+  if (path.includes(`/${folderName}/`)) {
+    const module = (await modules[path]()) as { default: string };
+    audioFilesInFolder.push({
+      webPath: module.default,
+      originalPath: path,
+    });
+  }
 }
 ---
 
-<div class="mb-12">
-  <h2 class="text-2xl font-bold text-slate-800 mb-4 border-b pb-2">{title}</h2>
-  <div
-    class:list={[
-      "p-4 rounded-lg shadow-sm flex justify-between items-center mb-6 min-h-[86px]",
-      groundTruthSrc
-        ? "bg-sky-50 border-sky-200"
-        : "bg-slate-50 border-dashed border-slate-300",
-    ]}
+<div class="mb-6 bg-white shadow-md rounded-lg">
+  <h2
+    class="mx-2 pt-1 font-bold text-sm text-slate-700 mb-2 border-b border-slate-400 pb-2"
   >
-    {
-      groundTruthSrc ? (
-        <>
-          <strong class="font-mono text-sm text-sky-800">
-            Original (Ground Truth) ⭐
-          </strong>
-          <AudioPlayer
-            src={groundTruthSrc}
-            class="max-w-[300px]"
-            specPath={groundTruthSpecPath}
-          />
-        </>
-      ) : (
-        <div class="w-full text-center">
-          <span class="text-slate-400 text-sm italic">
-            Kein Original für diesen Vergleich vorhanden
-          </span>
-        </div>
-      )
-    }
-  </div>
+    {title}
+  </h2>
 
-  <div class="space-y-4">
+  <div class="space-y-1 mb-1">
     {
       audioFilesInFolder.length > 0 ? (
-        audioFilesInFolder.map((audioFile) => {
-          const fileName = audioFile.default.split("/").pop();
+        audioFilesInFolder.map((audioFile, index) => {
+          const fileName = audioFile.originalPath.split("/").pop();
+          if (!fileName) return;
+
           const specFileName = fileName.replace(/\.[^/.]+$/, ".png");
           const specImagePath = `/assets/spectrograms/${folderName}/${specFileName}`;
-
           return (
-            <div class="bg-white p-4 rounded-lg shadow-sm border flex justify-between items-center">
-              <AudioPlayer
-                src={audioFile.default}
-                class="max-w-[300px]"
-                specPath={specImagePath}
-              />
+            <div
+              class:list={[
+                "bg-white mx-2 border-slate-300",
+                index === audioFilesInFolder.length - 1 ? "" : "border-b",
+              ]}
+            >
+              <AudioPlayer src={audioFile.webPath} specPath={specImagePath} />
             </div>
           );
         })

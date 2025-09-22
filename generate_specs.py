@@ -4,7 +4,7 @@ import numpy as np
 from pathlib import Path
 import types
 
-INPUT_AUDIO_DIR = Path("public/assets/audio")
+INPUT_AUDIO_DIR = Path("src/assets/audio")
 OUTPUT_IMAGE_DIR = Path("public/assets/spectrograms")
 
 spec_config = types.SimpleNamespace(
@@ -37,7 +37,7 @@ def save_spectrogram_image(spec, output_path, config):
                    cmap="viridis",
                    extent=[0, duration_s, 0, spec.shape[0]])
     
-    fig.colorbar(im, ax=ax, format='%+2.0f dB', label='dB', pad=0.02)
+    fig.colorbar(im, ax=ax, format='%+2.0f dB', pad=0.02)
 
     ax.set_xlabel("Time (s)")
     ax.set_ylabel("Mel Bins")
