@@ -22,57 +22,74 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
   </head>
 
   <body class="bg-slate-100 text-slate-800">
-    <main class="max-w-6xl mx-auto p-4 sm:p-8">
-      <h1 class="text-3xl font-bold text-center mb-2">
+    <main class="max-w-5xl mx-auto p-4 sm:p-8">
+      <h1 class="text-[2.05rem] font-bold mb-8">
         Cross Domain Timbre Transfer Using Deep Generative Models
       </h1>
-      <p class="text-center text-slate-600 mb-10">Audio Demo</p>
-      <div class="rounded-lg overflow-hidden shadow-xs max-w-xl mx-auto mb-10">
+      <p class="text-slate-500 text-sm mb-5 text-justify">
+        These audio samples accompany the Master's Thesis, "Cross-Domain Timbre
+        Transfer Using Deep Generative Models," demonstrating a pipeline for
+        creating virtual instruments from the human voice. Operating at 44.1
+        kHz, the system is designed for unpaired data. We convert hummed audio
+        into a Log-Mel spectrogram, which a Variational Autoencoder-Generative
+        Adversarial Network (VAE-GAN) translates to the target instrument's
+        timbre, before the state-of-the-art vocoder BigVGAN synthesizes the
+        final waveform.
+      </p>
+      <div class="rounded-lg overflow-hidden shadow-sm max-w-xl mb-12 ml-1">
         <img src="/assets/pipeline.png" alt="overview over the pipeline" />
+      </div>
+
+      <div class="mb-8">
+        <h2 class="font-semibold text-md text-slate-700 mb-2">
+          Real Instrument Samples
+        </h2>
+        <p class="text-slate-500 text-sm max-w-3xl mb-2 text-justify">
+          For comparison, here are real audio samples for each of the three
+          target instruments, taken from the training datasets.
+        </p>
+        <div class="flex gap-1 ml-1">
+          <div class="rounded-lg px-2 pb-1 shadow-sm bg-white">
+            <span class="text-xs pl-1 font-semibold text-slate-600"
+              >E-Piano:</span
+            >
+            <AudioPlayer src={pianoGT} specPath={pianoGTSpec} />
+          </div>
+          <div class="rounded-lg px-2 pb-1 bg-white shadow-sm text-slate-600">
+            <span class="text-xs font-semibold">Saxophone:</span>
+            <AudioPlayer src={saxophoneGT} specPath={saxophoneGTSpec} />
+          </div>
+          <div class="rounded-lg px-2 pb-1 bg-white shadow-sm text-slate-600">
+            <span class="text-xs font-semibold">Guitar:</span>
+            <AudioPlayer src={guitarGT} specPath={guitarGTSpec} />
+          </div>
+        </div>
       </div>
 
       <div class="border-b border-slate-200">
         <nav id="tabs" class="-mb-px flex space-x-6" aria-label="Tabs">
-          <button data-tab-target="#experiment1" class="tab active-tab"
+          <button data-tab-target="#diff_instrum" class="tab active-tab"
             >Different Instruments</button
           >
-          <button data-tab-target="#experiment2" class="tab"
+          <button data-tab-target="#changes" class="tab"
             >Architectual Changes</button
           >
-          <button data-tab-target="#experiment3" class="tab"
-            >Conditioning on Sinus</button
+          <button data-tab-target="#sinus" class="tab"
+            >Simplified Pitch Input</button
           >
-          <button data-tab-target="#experiment4" class="tab"
+          <button data-tab-target="#data_param" class="tab"
             >Data and Param Size</button
           >
         </nav>
       </div>
 
-      <div class="py-6">
-        <div id="experiment1" class="tab-content">
-          <div class="mb-8">
-            <h2 class="font-semibold text-sm text-slate-700 mb-2">
-              Real Instrument Samples
-            </h2>
-            <div class="flex gap-2">
-              <div class="rounded-lg px-2 pb-1 bg-white">
-                <span class="text-xs pl-1 font-semibold text-slate-600"
-                  >E-Piano:</span
-                >
-                <AudioPlayer src={pianoGT} specPath={pianoGTSpec} />
-              </div>
-              <div class="rounded-lg px-2 pb-1 bg-white text-slate-600">
-                <span class="text-xs font-semibold">Saxophone:</span>
-                <AudioPlayer src={saxophoneGT} specPath={saxophoneGTSpec} />
-              </div>
-              <div class="rounded-lg px-2 pb-1 bg-white text-slate-600">
-                <span class="text-xs font-semibold">Guitar:</span>
-                <AudioPlayer src={guitarGT} specPath={guitarGTSpec} />
-              </div>
-            </div>
-          </div>
-          <Experiment title="Results of the Base Model">
-            <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+      <div class="py-4">
+        <div id="diff_instrum" class="tab-content">
+          <Experiment
+            title="Generated Instrument Samples"
+            text="The following audio examples were generated from voices included in the training set but from melodies in the held-out test set. Samples are selected randomly and not cherry-picked."
+          >
+            <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
             <AudioRow
               title="Generated E-piano"
               folderName="instruments/hum_mixed_2_epiano_match_base"
@@ -87,8 +104,10 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
             />
           </Experiment>
 
-          <Experiment title="Results of unseen Voices"
-            ><AudioRow title="Input Melody (hummed)" folderName="hum_unseen" />
+          <Experiment
+            title="Generalization to Unseen Voices"
+            text="This section demonstrates the model's generalization capabilities. The input hums are from voices that were not part of the training set, testing the model's performance on unseen voices."
+            ><AudioRow title="Input Melody (Hummed)" folderName="hum_unseen" />
             <AudioRow
               title="Generated E-piano"
               folderName="instruments/unseen_piano"
@@ -104,34 +123,45 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
           </Experiment>
         </div>
       </div>
-      <div id="experiment2" class="tab-content hidden">
-        <Experiment title="Downsample">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+      <div id="changes" class="tab-content hidden">
+        <p class="text-slate-500 text-sm max-w-2xl mb-5 text-justify">
+          As part of this research, we investigated a range of architectural
+          changes aimed at enhancing the quality and realism of the generated
+          audio. Below are samples from the different directions explored.
+        </p>
+        <Experiment
+          title="Varying the Model Depth"
+          text="We experimented with adding more downsample steps for a tighter information bottleneck, hypothesizing that this would lead to a more abstract feature representation, resulting in fewer vocal artifacts in the final audio."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
           <AudioRow
-            title="2 Down (baseline)"
+            title="2 downsample steps (base)"
             folderName="instruments/hum_mixed_2_epiano_match_base"
           />
           <AudioRow
-            title="3 Down"
+            title="3 downsample steps"
             folderName="downsample/hum_mixed_2_epiano_3_down_16"
           />
           <AudioRow
-            title="4 Down"
+            title="4 downsample steps"
             folderName="downsample/hum_mixed_2_epiano_4_down_8"
           />
           <AudioRow
-            title="5 Down"
+            title="5 downsample steps"
             folderName="downsample/hum_mixed_2_epiano_5_down_4"
           />
         </Experiment>
-        <Experiment title="Different Discriminator Architectures">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+        <Experiment
+          title="Discriminator Architecture Comparison"
+          text="We compared the baseline PatchGAN discriminator against a single-output and a multi-scale architecture."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
           <AudioRow
-            title="PatchGan (baseline)"
+            title="PatchGan Discriminator (baseline)"
             folderName="instruments/hum_mixed_2_epiano_match_base"
           />
           <AudioRow
-            title="Single"
+            title="Single Output Discriminator"
             folderName="discriminator/hum_mixed_2_epiano_match_sd"
           />
           <AudioRow
@@ -154,64 +184,90 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
             folderName="hum_mixed_2_epiano_match_cycle_ssim"
           />
         </Experiment> -->
-        <Experiment title="Decay Recon losses">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+        <Experiment
+          title="Decaying the Reconstruction Losses"
+          text="We experimented with decaying the reconstruction and cycle loss to better preserve musical content during the early stages of training, while encouraging the model to learn more expressive mappings in later epochs."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
           <AudioRow
             title="Without Decay (baseline)"
             folderName="instruments/hum_mixed_2_epiano_match_base"
           />
           <AudioRow
-            title="With Decay from epoche 60"
+            title="Decay starting at Epoch 60"
             folderName="decay/hum_mixed_2_epiano_match_decay_recon_2"
           />
           <AudioRow
-            title="With Decay from epoche 1"
+            title="Decay starting at Epoch 1"
             folderName="decay/hum_mixed_2_epiano_match_decay_recon_5"
           />
         </Experiment>
       </div>
-      <div id="experiment3" class="tab-content hidden">
-        <div
-          class="rounded-lg overflow-hidden shadow-xs max-w-md mx-auto mb-10"
-        >
+      <div id="sinus" class="tab-content hidden">
+        <p class="text-slate-500 text-sm max-w-2xl mb-5 text-justify">
+          To test the impact of input complexity, we trained a model on a
+          simplified representation: a pure sine wave resynthesized from the F0
+          and RMS of the original hums. This resulted in poor melodic
+          preservation, which led us to hypothesize that a richer signal
+          benefits training. Consequently, we trained a second model on a sine
+          wave enriched with harmonic overtones.
+        </p>
+        <div class="rounded-lg overflow-hidden shadow-xs max-w-md ml-1 mb-2">
           <img
             src="/assets/sinus.png"
             alt="extracted sinus and sinus with overtones"
           />
         </div>
-        <Experiment title="Conditioned and Trained on extracted Sinus">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+        <p class="text-slate-500 text-xs max-w-2xl mb-5 text-justify">
+          <strong>a)</strong> Mel spectrogram of a hummed melody, <strong
+            >b)</strong
+          > The sine wave synthesized from the F0 and RMS of the original hum <strong
+            >c)</strong
+          >
+          synthesized sine wave with added harmonic overtones
+        </p>
+        <Experiment
+          title="Training on a Simplified Pitch Input"
+          text="This experiment uses a pure sine wave, synthesized from the hum's extracted fundamental frequency (F0), as the training input."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
 
-          <AudioRow title="extracted sinus" folderName="sinus/sinus" />
+          <AudioRow title="Synthesized Sine Wave" folderName="sinus/sinus" />
           <AudioRow
-            title="trained on sinus"
+            title="Trained on Sine"
             folderName="sinus/hum_mixed_sinus_2_epiano_match"
           />
           <AudioRow
-            title="trained on hummed"
+            title="Trained on Hum"
             folderName="instruments/hum_mixed_2_epiano_match_base"
           />
         </Experiment>
-        <Experiment title="Conditioning on extracted Sinus with overtones">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+        <Experiment
+          title="Training on a Simplified Pitch Input with added Harmonics"
+          text="Based on the previous result, this experiment tests a richer signal. The model was trained on a sine wave enriched with harmonic overtones to provide more spectral information."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
 
           <AudioRow
-            title="extracted sinus with ot"
+            title="Synthesized Sine + Overtones"
             folderName="sinus/sinus_ot"
           />
           <AudioRow
-            title="trained on sinus ot"
+            title="Trained on Sine + Overtones"
             folderName="sinus/hum_mixed_sinus_ot_2_epiano_match"
           />
           <AudioRow
-            title="trained on hummed"
+            title="Trained on Hum"
             folderName="instruments/hum_mixed_2_epiano_match_base"
           />
         </Experiment>
       </div>
-      <div id="experiment4" class="tab-content hidden">
-        <Experiment title="less Data">
-          <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
+      <div id="data_param" class="tab-content hidden">
+        <Experiment
+          title="Impact of Training Data Size"
+          text="We analyzed the model's data efficiency by training it on progressively smaller subsets of the dataset, ranging from the full 120-minute baseline down to a minimum of only 12 minutes of audio."
+        >
+          <AudioRow title="Input Melody (Hummed)" folderName="hum_mixed" />
           <AudioRow
             title="100 % (120 min)"
             folderName="instruments/hum_mixed_2_epiano_match_base"
@@ -233,7 +289,10 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
             folderName="data_size/hum_mixed_2_epiano_match_data_10"
           />
         </Experiment>
-        <Experiment title="less params">
+        <Experiment
+          title="Impact of Model Size"
+          text="To investigate the trade-off between model complexity and output quality we trained several smaller versions of the model, with parameter reductions focused on the generator architecture."
+        >
           <AudioRow title="Input Melody (hummed)" folderName="hum_mixed" />
           <AudioRow
             title="Baseline (2.69 M)"

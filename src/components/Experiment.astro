@@ -1,13 +1,17 @@
 ---
 export interface Props {
   title: string;
+  text?: string;
 }
-const { title } = Astro.props;
+const { title, text } = Astro.props;
 ---
 
-<div class="mb-8">
-  <h2 class="text-xl font-semibold text-slate-700 mb-5">{title}</h2>
-  <div class="flex gap-1">
+<div class="mb-8 w-full overflow-x-auto">
+  <h2 class="text-xl font-semibold text-slate-700 mb-2">{title}</h2>
+  <p class="text-slate-500 text-sm mb-5 text-justify">
+    {text}
+  </p>
+  <div class="flex gap-1 ml-1">
     <slot />
   </div>
 </div>
