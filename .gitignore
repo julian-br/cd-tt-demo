@@ -23,5 +23,3 @@ pnpm-debug.log*
 .vscode
 .idea/
 
-# ignore for now
-assets/
