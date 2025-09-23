@@ -8,7 +8,7 @@ import pianoGT from "../assets/audio/gt/piano_gt.wav";
 import guitarGT from "../assets/audio/gt/guitar_gt.wav";
 import saxophoneGT from "../assets/audio/gt/saxophone_gt.wav";
 
-const gtSpecFolder = "/assets/spectrograms/gt";
+const gtSpecFolder = `${import.meta.env.BASE_URL}assets/spectrograms/gt`;
 const pianoGTSpec = `${gtSpecFolder}/piano_gt.png`;
 const guitarGTSpec = `${gtSpecFolder}/guitar_gt.png`;
 const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
@@ -37,7 +37,10 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
         final waveform.
       </p>
       <div class="rounded-lg overflow-hidden shadow-sm max-w-xl mb-12 ml-1">
-        <img src="/assets/pipeline.png" alt="overview over the pipeline" />
+        <img
+          src=`${import.meta.env.BASE_URL}assets/pipeline.png`
+          alt="overview over the pipeline"
+        />
       </div>
 
       <div class="mb-8">
@@ -214,7 +217,7 @@ const saxophoneGTSpec = `${gtSpecFolder}/saxophone_gt.png`;
         </p>
         <div class="rounded-lg overflow-hidden shadow-xs max-w-md ml-1 mb-2">
           <img
-            src="/assets/sinus.png"
+            src=`${import.meta.env.BASE_URL}assets/sinus.png`
             alt="extracted sinus and sinus with overtones"
           />
         </div>

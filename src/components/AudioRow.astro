@@ -36,7 +36,8 @@ for (const path in modules) {
           if (!fileName) return;
 
           const specFileName = fileName.replace(/\.[^/.]+$/, ".png");
-          const specImagePath = `/assets/spectrograms/${folderName}/${specFileName}`;
+          const specImagePath = `${import.meta.env.BASE_URL}assets/spectrograms/${folderName}/${specFileName}`;
+
           return (
             <div
               class:list={[
